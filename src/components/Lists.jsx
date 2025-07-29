@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import FlightLists from './Form/FlightLists';
 import { api } from '../api';
 import Navbar from './Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { ActionType } from '../redux/action/action';
-import { fetchCurrencyList } from '../redux/action/fetch';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { jwtDecode } from 'jwt-decode';
@@ -13,23 +12,9 @@ function Lists() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [currencyModal, setCurrencyModal] = useState(false);
-
-    const currencyRedux = useSelector(state => state.flights.currency);
-    const [currency, setCurrency] = useState({ cur: currencyRedux.cur || 'USD', rate: currencyRedux.rate || 1 });
-
+    const currency = useSelector(state => state.flights.currency);
     const user = useSelector(state => state.flights.user);
     const formData = useSelector(state => state.flights.formData);
-
-
-    useEffect(() => {
-        const currencyApi = async () => {
-            const res = await fetch('https://v6.exchangerate-api.com/v6/8ec9b0d8525f482092ffe45e/latest/USD');
-            const data = await res.json();
-            dispatch(fetchCurrencyList((data.conversion_rates)));
-        }
-        currencyApi();
-    }, [dispatch, currencyModal])
 
     // Function to load airports dynamically from your Laravel backend
     const loadAirports = async (inputValue) => {
@@ -97,7 +82,6 @@ function Lists() {
 
     return (
         <div className="min-h-screen">
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
             <FlightLists t={t}
                 currency={currency}
                 user={user}

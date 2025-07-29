@@ -6,12 +6,11 @@ import { api } from '../api';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('account');
-    const [currencyModal, setCurrencyModal] = useState(false);
-    const [currency, setCurrency] = useState({ cur: "USD", rate: 1 });
     const [errors, setErrors] = useState({});
     const [err, setErr] = useState('');
     const [success, setSuccess] = useState('');
     const user = useSelector(state => state.flights.user);
+
     const [preview, setPreview] = useState(
         user?.image
             ? user?.image.startsWith('http')
@@ -146,8 +145,6 @@ const Settings = () => {
 
     return (
         <div>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
-
             <div className="min-h-screen bg-gray-50 p-6">
                 <div className="max-w-3xl mx-auto bg-white shadow rounded-xl p-6">
                     <h2 className="text-2xl font-semibold mb-6">Settings</h2>

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrencyList, fetchFlights, fetchFormData } from '../redux/action/fetch';
+import { fetchFlights, fetchFormData } from '../redux/action/fetch';
 import { api } from '../api';
 
 import Navbar from './Navbar';
@@ -19,11 +19,9 @@ function Return() {
     const [showCartModal, setShowCartModal] = useState(false);
     const [sortedFlights, setSortedFlights] = useState([]);
     const [sortBy, setSortBy] = useState('price_asc');
-    const [currencyModal, setCurrencyModal] = useState(false);
     const { t } = useTranslation();
 
-    const currencyRedux = useSelector(state => state.flights.currency);
-    const [currency, setCurrency] = useState({ cur: currencyRedux.cur || 'USD', rate: currencyRedux.rate || 1 });
+    const currency = useSelector(state => state.flights.currency);
 
     // Redux selectors
     const formData = useSelector(state => state.flights.formData);
@@ -51,14 +49,7 @@ function Return() {
         return errors;
     };
 
-    useEffect(() => {
-        const currencyApi = async () => {
-            const res = await fetch('https://v6.exchangerate-api.com/v6/8ec9b0d8525f482092ffe45e/latest/USD');
-            const data = await res.json();
-            dispatch(fetchCurrencyList((data.conversion_rates)));
-        }
-        currencyApi();
-    }, [dispatch])
+
 
     // Submit handler
     const handleSubmit = async (e) => {
@@ -201,7 +192,6 @@ function Return() {
 
     return (
         <>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
             <div className="bg-blue-50 min-h-screen shadow">
                 <div className="max-w-6xl p-4 md:p-6 mx-auto rounded">
                     <SearchForm t={t}

@@ -1,75 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css'
 
-import { Routes, Route } from 'react-router-dom';
-
-import Lists from './components/Lists';
-import CartPage from './components/Form/CartPage';
-import Ticket from './components/Form/Ticket';
+import { Outlet } from 'react-router-dom';
 import "toastify-js/src/toastify.css"
-import StripeProvider from './components/payment/StripeProvider';
-import Payment from './components/Form/Payment';
-import RegisterForm from './auth/RegisterForm';
-import PrivateRoutes from './components/PrivateRoutes';
-import Search from './components/Search';
-import Return from './components/Return';
-import Settings from './components/Settings';
-import Bookings from './components/Bookings';
-import LoginForm from './auth/LoginForm';
-import Github from './auth/Github';
-import Google from './auth/Google';
-import Facebook from './auth/Facebook';
-import ForgotPassword from './auth/ForgotPassword';
+import Navbar from './components/Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCurrencyList } from './redux/action/fetch';
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/register/page" element={<RegisterForm />} />
-      <Route path="/login/page" element={<LoginForm />} />
-      <Route path="/github/callback" element={<Github />} />
-      <Route path="/google/callback" element={<Google />} />
-      <Route path="/facebook/callback" element={<Facebook />} />
-      <Route path="/forgot/password" element={<ForgotPassword />} />
+  const dispatch = useDispatch();
+  const [currencyModal, setCurrencyModal] = useState(false);
+  const currencyRedux = useSelector(state => state.flights.currency);
+  const [currency, setCurrency] = useState({
+    cur: currencyRedux?.cur || 'USD',
+    rate: currencyRedux?.rate || 1
+  });
 
-      <Route path="/"
-        element={
-          <PrivateRoutes><Search /></PrivateRoutes>
-        } />
-      <Route path="/flights"
-        element={
-          <PrivateRoutes><Lists /></PrivateRoutes>}
-      />
-      <Route path="/flight/cart"
-        element={
-          <PrivateRoutes><CartPage /></PrivateRoutes>
-        } />
-      <Route path="/buy/ticket/:id/:flightId"
-        element={<PrivateRoutes><Ticket /></PrivateRoutes>
-        } />
-      <Route path="/direct/buy/ticket/:flightId"
-        element={
-          <PrivateRoutes><Ticket /></PrivateRoutes>
-        } />
-      <Route path="/return/flight"
-        element={
-          <PrivateRoutes><Return /></PrivateRoutes>
-        } />
-      <Route path="/settings"
-        element={
-          <PrivateRoutes><Settings /></PrivateRoutes>
-        } />
-      <Route path="/bookings"
-        element={
-          <PrivateRoutes><Bookings /></PrivateRoutes>
-        } />
-      <Route path="/checkout" element={
-        <PrivateRoutes>
-          <StripeProvider>
-            <Payment />
-          </StripeProvider>
-        </PrivateRoutes>
-      } />
-    </Routes>
+  useEffect(() => {
+    const currencyApi = async () => {
+      const res = await fetch('https://v6.exchangerate-api.com/v6/8ec9b0d8525f482092ffe45e/latest/USD');
+      const data = await res.json();
+      dispatch(fetchCurrencyList((data.conversion_rates)));
+    }
+    currencyApi();
+  }, [dispatch, currencyModal])
+
+  return (
+    <div>
+      <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
+      <div>
+        <Outlet />
+      </div>
+    </div>
   );
 }
 

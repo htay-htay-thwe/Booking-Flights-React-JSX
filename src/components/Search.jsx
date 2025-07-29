@@ -16,12 +16,6 @@ function Search() {
         return_date: '',
     };
     const [formData, setFormData] = useState(initialValues);
-    const [currencyModal, setCurrencyModal] = useState(false);
-    const currencyRedux = useSelector(state => state.flights.currency);
-    const [currency, setCurrency] = useState({
-        cur: currencyRedux?.cur || 'USD',
-        rate: currencyRedux?.rate || 1
-    });
     const dispatch = useDispatch();
     const user = useSelector(state => state.flights.user);
     const { t } = useTranslation();
@@ -127,7 +121,6 @@ function Search() {
 
     return (
         <div>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
             <SearchFlight t={t} formData={formData} loadAirports={loadAirports} handleFromChange={handleFromChange} handleSwapPlaces={handleSwapPlaces} handleToChange={handleToChange} handleInputChange={handleInputChange} />
         </div>
     )

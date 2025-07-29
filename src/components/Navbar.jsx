@@ -59,15 +59,15 @@ function Navbar({ setCurrency, currency, currencyModal, setCurrencyModal }) {
     return (
         <div className='sticky top-0 z-30'>
             <div className='sticky top-0 z-30'>
-                <nav className="w-full  bg-white shadow-sm px-4 md:px-10 py-4 flex justify-between items-center">
+                <nav className="w-full  bg-gray-100 shadow-sm px-4 md:px-10 py-4 flex justify-between items-center">
                     <div className='flex justify-between w-40'>
                         {/* <!-- Logo --> */}
                         <div className="flex items-center space-x-2">
-                            <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
+                            <img src="./img/flight-logo.png" alt="Logo" className="h-16 w-auto" />
                             {/* <span class="text-xl font-bold text-gray-800">YourBrand</span> */}
                         </div>
-                        <Link to="/" className='hover:text-blue-500 text-lg'>
-                            <FontAwesomeIcon icon={faPlaneDeparture} /> Flights
+                        <Link to="/" className='hover:text-blue-500 text-lg text-center mt-4'>
+                            <FontAwesomeIcon icon={faPlaneDeparture} className='text-amber-600' /> Flights
                         </Link>
                     </div>
 
@@ -78,7 +78,7 @@ function Navbar({ setCurrency, currency, currencyModal, setCurrencyModal }) {
 
                         {/* <!-- Cart --> */}
                         <Link to="/flight/cart">
-                            <button className="relative hover:text-blue-600 transition ">
+                            <button className="relative hover:text-blue-600 transition mt-1 ">
                                 <FontAwesomeIcon icon={faCartShopping} className='text-xl' />
                                 {cart.length > 0 && (
                                     <span className="absolute -top-2.5 -right-2.5 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">{cart.length}</span>

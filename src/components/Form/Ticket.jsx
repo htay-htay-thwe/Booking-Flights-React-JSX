@@ -7,7 +7,7 @@ import Insurance from '../branch/Insurance';
 import ContactClient from '../branch/ContactClient';
 import FlightSummary from '../branch/FlightSummary'
 import { api } from '../../api';
-import { fetchCurrencyList, fetchFlightCheckOut, fetchReserveFlight, fetchSeats } from './../../redux/action/fetch/index';
+import { fetchFlightCheckOut, fetchReserveFlight, fetchSeats } from './../../redux/action/fetch/index';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -25,10 +25,8 @@ const Ticket = () => {
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [selectedPassenger, setSelectedPassenger] = useState('Create a new passenger');
     const [isOpenRadio, setIsOpenRadio] = useState(false);
-    const currencyRedux = useSelector(state => state.flights.currency);
-    const [currency, setCurrency] = useState({ cur: currencyRedux.cur || 'USD', rate: currencyRedux.rate || 1 });
+    const currency = useSelector(state => state.flights.currency);
     const { id, flightId } = useParams();
-    const [currencyModal, setCurrencyModal] = useState(false);
     const user = useSelector(state => state.flights.user);
     const flightSummary = useSelector(state => state.flights.checkout);
 
@@ -138,17 +136,13 @@ const Ticket = () => {
     }, [flightSummary]);
 
     useEffect(() => {
-        const currencyApi = async () => {
-            const res = await fetch('https://v6.exchangerate-api.com/v6/8ec9b0d8525f482092ffe45e/latest/USD');
-            const data = await res.json();
-            dispatch(fetchCurrencyList((data.conversion_rates)));
-            setPaymentData(prev => ({
-                ...prev,
-                currency: currency?.cur
-            }));
-        }
-        currencyApi();
-    }, [dispatch, currencyModal])
+
+        setPaymentData(prev => ({
+            ...prev,
+            currency: currency?.cur
+        }));
+
+    }, [currency?.cur])
 
     // checkout flight
     useEffect(() => {
@@ -349,7 +343,6 @@ const Ticket = () => {
 
     return (
         <div>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
             {loading && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-pink-100/20 ">
                     <div className="flex items-center justify-center space-x-2">

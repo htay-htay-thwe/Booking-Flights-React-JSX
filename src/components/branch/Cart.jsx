@@ -10,7 +10,7 @@ import { Link } from 'react-router';
 
 
 
-const Cart = ({ t, user }) => {
+const Cart = ({ t, currency, user }) => {
     const [selectedCartId, setSelectedCartId] = useState(null);
     const [selectedFlight, setSelectedFlight] = useState('');
     const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const Cart = ({ t, user }) => {
                         {t('cartName')}
                         {mockFlights.length > 0 && (<span>({mockFlights.length})</span>)}
                     </div>
-                    <div>{t('fromCity')}</div>
+
                     <div className="flex flex-col  justify-center items-center text-center w-full gap-4 py-10">
                         <img src="/img/group.svg" className="w-24 h-24" alt="Empty Cart" />
                         <div className="text-2xl font-semibold text-gray-800">{t('emptyCart')}</div>
@@ -223,7 +223,7 @@ const Cart = ({ t, user }) => {
                                                 <span className="text-blue-600 font-semibold">1 x Passenger</span>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-lg font-semibold text-gray-900">${flight.price}</p>
+                                                <p className="text-lg font-semibold text-gray-900">{currency?.cur}{(flight.price * (currency?.rate)).toFixed(2)}</p>
                                                 <p className="text-xs text-gray-500">Includes taxes & fees</p>
                                             </div>
                                         </div>
@@ -247,7 +247,7 @@ const Cart = ({ t, user }) => {
                             <div className="flex justify-between items-center mb-4">
                                 <span className="text-gray-700">{t('totalPriceLetter')}</span>
                                 <span className="text-red-600 font-semibold text-xl">
-                                    $ {Array.isArray(selectedFlight) ? selectedFlight[0].price + selectedFlight[1].price : selectedFlight ? selectedFlight.price : '0.0'}
+                                    {currency?.cur} {Array.isArray(selectedFlight) ? ((selectedFlight[0].price + selectedFlight[1].price) * (currency?.rate)).toFixed(2) : selectedFlight ? (selectedFlight.price * (currency?.rate)).toFixed(2) : '0.0'}
                                 </span>
                             </div>
                             {selectedFlight ? (

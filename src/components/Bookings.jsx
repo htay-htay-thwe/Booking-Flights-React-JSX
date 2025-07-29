@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlane, faPlaneDeparture } from '@fortawesome/free-solid-svg-icons';
 import Navbar from './Navbar';
@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { api } from '../api';
 
 function Bookings() {
-    const [currencyModal, setCurrencyModal] = useState(false);
-    const [currency, setCurrency] = useState({ cur: "USD", rate: 1 });
     const dispatch = useDispatch();
     const user = useSelector(state => state.flights.user);
 
@@ -19,6 +17,8 @@ function Bookings() {
     }
 
     const booking = useSelector(state => state.flights.book);
+
+    const currency = useSelector(state => state.flights.currency);
 
     useEffect(() => {
         bookFlights();
@@ -37,7 +37,6 @@ function Bookings() {
 
     return (
         <div>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:max-w-6xl gap-5 mx-auto">
                 {booking.map((flight, index) => {
 

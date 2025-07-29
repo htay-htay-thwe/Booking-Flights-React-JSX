@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import StripeCheckout from '../payment/StripeCheckOut';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import Total from '../branch/Total';
@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router';
 import { api } from '../../api';
 import CountdownTimer from '../branch/CountdownTime';
 import UpdateContact from '../branch/UpdateContact';
-import { fetchCurrencyList } from '../../redux/action/fetch';
 import Navbar from '../Navbar';
 import { useTranslation } from 'react-i18next';
 import { jwtDecode } from 'jwt-decode';
@@ -20,12 +19,8 @@ function Payment() {
     const { t } = useTranslation();
     const [loadingStatus, setLoadingStatus] = useState(false);
 
-    const currencyRedux = useSelector(state => state.flights.currency);
-    const [currency, setCurrency] = useState({ cur: currencyRedux.cur || 'USD', rate: currencyRedux.rate || 1 });
-
-    const [currencyModal, setCurrencyModal] = useState(false);
+    const currency = useSelector(state => state.flights.currency);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const reserve = useSelector(state => state.flights.reserveFlight);
     const flightSummary = useSelector(state => state.flights.checkout);
     const flightPrice = Array.isArray(flightSummary)
@@ -57,14 +52,6 @@ function Payment() {
         }
     };
 
-      useEffect(() => {
-           const currencyApi = async () => {
-               const res = await fetch('https://v6.exchangerate-api.com/v6/8ec9b0d8525f482092ffe45e/latest/USD');
-               const data = await res.json();
-               dispatch(fetchCurrencyList((data.conversion_rates)));
-           }
-           currencyApi();
-       }, [dispatch, currencyModal])
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -75,7 +62,6 @@ function Payment() {
 
     return (
         <div>
-            <Navbar currency={currency} setCurrency={setCurrency} setCurrencyModal={setCurrencyModal} currencyModal={currencyModal} />
 
             <div className={`max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-2 gap-6 text-sm text-gray-700 ${loadingStatus ? 'opacity-60 pointer-events-none' : ''}`}>
                 <div className=''>
