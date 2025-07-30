@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Addons from '../branch/Addons';
-import Kg from '../branch/kg';
+import Kg from '../branch/Kg';
 import Seat from '../branch/Seat';
 import Insurance from '../branch/Insurance';
 import ContactClient from '../branch/ContactClient';
