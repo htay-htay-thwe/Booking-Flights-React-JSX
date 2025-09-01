@@ -1,7 +1,4 @@
 # React + Vite
-
-Certainly! Here's a polished and professional **README.md** tailored for your frontend project, [Booking-Flights-React-JSX](https://github.com/htay-htay-thwe/Booking-Flights-React-JSX). This version is designed to impress potential employers by highlighting your skills, project structure, and setup instructions in a clean and organized manner.
-
 ---
 
 # ✈️ Booking Flights Frontend
